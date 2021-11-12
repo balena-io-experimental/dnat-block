@@ -59,3 +59,11 @@ services:
     depends_on:
       - mywebapp
 ```
+
+You can follow the service logs to see the iptables rules being created.
+
+```plaintext
+12.11.21 12:22:05 (-0500) -A POSTROUTING -s 172.18.0.2/32 -d 172.18.0.2/32 -p tcp -m tcp --dport 80 -m comment --comment my-custom-rules -j MASQUERADE
+12.11.21 12:22:05 (-0500) -A DOCKER -p tcp -m tcp --dport 80 -m comment --comment my-custom-rules -j DNAT --to-destination 172.18.0.2:80
+12.11.21 12:22:05 (-0500) -A DOCKER -d 172.18.0.2/32 -p tcp -m tcp --dport 80 -m comment --comment my-custom-rules -j ACCEPT
+```
