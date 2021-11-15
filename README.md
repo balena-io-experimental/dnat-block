@@ -2,7 +2,16 @@
 
 Dynamically expose ports to services at runtime via environment variables.
 
+Rules will be created via `iptables` that should be functionally the same as exposing ports via `docker-compose.yml`,
+only without requiring the main services to restart or pushing a new release.
+
 Note that your app must be running in bridge networking mode (the default). Host networking does not require this block.
+
+## Some use-cases
+
+1. Running DNS server in bridge networking, and binding port 53 at runtime in a way that doesn't conflict with dnsmasq on the host OS.
+2. Allow setting the exposed host ports on a per-device basis with environment vars rather than fleet-wide.
+3. Expose ports temporarily for debugging without restarting containers.
 
 ## Environment Variables
 
@@ -46,6 +55,9 @@ services:
   # example only, your service goes here
   mywebapp:
     image: nginx:1.21.4-alpine
+    # dnat will expose these ports for you!!
+    # ports:
+    #   - 80:80/tcp
 
   # tell dnat to forward ports to your service
   dnat:
